@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class MainEngineScript : MonoBehaviour {
 
-	public GameObject Enermy;
+	[SerializeField]
+	private GameObject _enermy;
+
+	private static MainEngineScript _instance;
+	public static MainEngineScript GetInstance()
+	{
+		return _instance;
+	}
+
 
 	// Use this for initialization
 	void Start () {
-		
+		_instance = this;
 	}
 	
 	// Update is called once per frame
@@ -18,7 +26,7 @@ public class MainEngineScript : MonoBehaviour {
 
 	public void CreateEnermy(Vector3 pos, Quaternion rot)
 	{
-		GameObject e = Instantiate(Enermy);
+		GameObject e = Instantiate(_enermy);
 		e.name = "Enermy";
 		e.transform.SetPositionAndRotation(pos, rot);
 	}

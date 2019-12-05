@@ -2,31 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoveScript : MonoBehaviour {
+public class PlayerMoveScript : MonoBehaviour
+{
 
 	private float PlayerSpeed = 3.0f;
+	private RaycastHit hit;
+
+	[SerializeField]
+	private LayerMask layerMask;
 
 	// Use this for initialization
-	void Start () {
-		
+	void Start()
+	{
+
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
 
 		#region 캐릭터 이동
 		string moveKey = "";
-		
+
 		// 달리기 키
 		if (Input.GetKey(KeyCode.LeftShift)) moveKey += "E";
-		
+
 		// 이동 키
 		if (Input.GetKey(KeyCode.W)) moveKey += "W";
 		else if (Input.GetKey(KeyCode.S)) moveKey += "S";
 
 		if (Input.GetKey(KeyCode.A)) moveKey += "A";
 		else if (Input.GetKey(KeyCode.D)) moveKey += "D";
-		
+
 		// 이동 실행
 		if (!string.IsNullOrEmpty(moveKey))
 		{
@@ -39,7 +46,9 @@ public class PlayerMoveScript : MonoBehaviour {
 		{
 			Vector3 pos = transform.position + transform.forward * 5.0f;
 			Quaternion rot = transform.rotation;
-			GameObject.Find("GameController").GetComponent<MainEngineScript>().CreateEnermy(pos, rot);
+
+			MainEngineScript.GetInstance().CreateEnermy(pos, rot);
+			// GameObject.Find("GameController").GetComponent<MainEngineScript>().CreateEnermy(pos, rot);
 		}
 
 		if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -53,7 +62,7 @@ public class PlayerMoveScript : MonoBehaviour {
 		if (!"".Equals(key))
 		{
 			float speed = PlayerSpeed;
-			if (key.Contains("E")) speed *= 2;
+			if (key.Contains("E")) speed *= 3;
 
 			Vector3 pos = transform.position;
 
@@ -100,6 +109,9 @@ public class PlayerMoveScript : MonoBehaviour {
 
 	public void Shoot()
 	{
-		Vector3 pos = transform.position + transform.up * 2.1f + transform.forward * 1.4f + transform.right * 0.1f;
+		Debug.DrawRay(this.transform.position, this.transform.forward * 10f, Color.red, 0.3f);
+		if(Physics.Raycast(this.transform.position, this.transform.forward, out hit, 10f, layerMask)){
+			Destroy(hit.transform.gameObject);
+		}
 	}
 }
