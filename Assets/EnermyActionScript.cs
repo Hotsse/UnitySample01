@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,36 +12,84 @@ public class EnermyActionScript : MonoBehaviour {
 	}
 	static float enermySpeed = 2.0f;
 
-	private NavMeshAgent nav;
-	private GameObject player;
+	private NavMeshAgent _nav;
+	private GameObject _player;
+	private Animator _anim;
+
+	[SerializeField] private GameObject bloodEffect;
+
+	private bool isAlive = false;
+	private int healthPoint = 0;
+
 
 	void Awake()
 	{
-		nav = GetComponent<NavMeshAgent>();
-	}
+		_nav = GetComponent<NavMeshAgent>();
+		_player = GameObject.FindGameObjectWithTag("Player");
+		_anim = this.GetComponent<Animator>();
 
-	// Use this for initialization
-	void Start () {
-		player = GameObject.FindGameObjectWithTag("Player");
+		isAlive = true;
+		healthPoint = Random.Range(100, 150);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		/*
-		Vector3 dir = (player.transform.position - this.transform.position).normalized;
+		if (!isAlive) return;
 
-		Quaternion q = Quaternion.identity;
-		q.SetLookRotation(dir, Vector3.up);
+		Vector3 dir = (_player.transform.position - this.transform.position).normalized;
+		float dist = Vector3.Distance(this.transform.position, _player.transform.position);
 
-		q = Quaternion.Slerp(this.transform.rotation, q, Time.deltaTime * 50.0f);
-		q.x = 0.0f; q.z = 0.0f;
-		this.transform.rotation = q;
 
-		float dist = Vector3.Distance(this.transform.position, player.transform.position);
-		*/
+		if(dist <= 1.3)
+		{
+			// 공격
+			_anim.SetBool("Walk", true);
+			_anim.SetBool("Eating", true);
+		}
+		else
+		{
+			// 이동
+			_nav.SetDestination(_player.transform.position);
+			_anim.SetBool("Walk", true);
+		}
+	}
 
-		nav.SetDestination(player.transform.position);
-		
+	public void Hit(int damage, Vector3 pos, Quaternion rot)
+	{
+		CreateBloodEffect(pos, rot);
+
+		healthPoint -= damage;
+		if (healthPoint <= 0) Die();
+	}
+
+	private void CreateBloodEffect(Vector3 pos, Quaternion rot)
+	{
+		GameObject blood1 = (GameObject)Instantiate(bloodEffect, pos, rot);
+		blood1.transform.Rotate(0, 90, 0);
+		Destroy(blood1, 1.0f);
+	}
+
+	public void Die()
+	{
+		isAlive = false;
+		int r = Random.Range(0, 100);
+		if (r <= 50) _anim.Play("Death_01");
+		else _anim.Play("Death_02");
+
+		PlaySound("Sound/zDeath_1");
+
+		this.transform.Translate(Vector3.zero);
+		_nav.enabled = false;
+		this.GetComponent<Rigidbody>().isKinematic = true;
+		this.GetComponent<BoxCollider>().enabled = false;
+		Destroy(this.gameObject, 6.0f);
+	}
+
+	public void PlaySound(string tmp)
+	{
+		GameObject prefab = Resources.Load(tmp) as GameObject;
+		GameObject instance = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
+		Destroy(instance, 3.0f);
 	}
 }
