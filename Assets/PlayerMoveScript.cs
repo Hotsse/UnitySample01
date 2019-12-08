@@ -55,7 +55,7 @@ public class PlayerMoveScript : MonoBehaviour
 			MainEngineScript.GetInstance().CreateEnermy(pos, rot);
 		}
 
-		if (Input.GetKeyDown(KeyCode.Mouse1))
+		if (Input.GetAxisRaw("RightTrigger") != 0)
 		{
 			this.Shoot();
 		}

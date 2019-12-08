@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4708453498059910}
   - component: {fileID: 82233243206210162}
-  - component: {fileID: 114468364495258712}
   m_Layer: 0
   m_Name: hitBullet
   m_TagString: Untagged
@@ -51,7 +50,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 61d3cec0cb85cbf47bb198af28f868ad, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -127,15 +126,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &114468364495258712
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1036120129506510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfd5e3a07a5438840b9d70b35e623289, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destroyTimer: 1.5

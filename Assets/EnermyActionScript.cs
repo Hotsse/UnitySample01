@@ -65,6 +65,7 @@ public class EnermyActionScript : MonoBehaviour {
 
 	private void CreateBloodEffect(Vector3 pos, Quaternion rot)
 	{
+		// PlaySound("Sound/hitBullet");
 		GameObject blood1 = (GameObject)Instantiate(bloodEffect, pos, rot);
 		blood1.transform.Rotate(0, 90, 0);
 		Destroy(blood1, 1.0f);
